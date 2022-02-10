@@ -51,6 +51,48 @@ def delete_Books(Book_list, BookName, BookWriter):
             del Book_list[i]
             print("도서 정보가 삭제되었습니다.")
 
+def save_Member(MemberCard_list):
+    file = open("Member_db.txt", "wt")
+    for Member in MemberCard_list:
+        file.write(Member.name + '\n')
+        file.write(Member.phone_number + '\n')      
+    file.close()
+
+def save_Books(Book_list):
+    file = open("Book_db.txt", "wt")
+    for Book in Book_list:
+        file.write(Book.BookName + '\n')
+        file.write(Book.BookCategory + '\n')
+        file.write(Book.BookWriter + '\n')
+    file.close()
+    
+def load_Member(MemberCard_list):
+    file = open("Member_db.txt", "rt")
+    lines = file.readlines()
+    num = len(lines) / 2
+    num = int(num)
+
+    for i in range(num):
+        name = lines[2*i].rstrip('\n')
+        phone_number = lines[2*i+1].rstrip('\n')
+        Member = MemberCard(name, phone_number)
+        MemberCard_list.append(Member)
+    file.close()    
+
+def load_Books(Book_list):
+    file = open("Book_db.txt", "rt")
+    lines = file.readlines()
+    num = len(lines) / 3
+    num = int(num)
+
+    for i in range(num):
+        BookName = lines[3*i].rstrip('\n')
+        BookCategory = lines[3*i+1].rstrip('\n')
+        BookWriter = lines[3*i+1].rstrip('\n')
+        books = Books(BookName, BookCategory, BookWriter)
+        Book_list.append(books)
+    file.close()    
+
 
 def print_menu():
     print("1. 회원 등록")
@@ -67,7 +109,9 @@ def print_menu():
 
 def run():
     MemberCard_list = []
+    load_Member(MemberCard_list)
     Book_list = []
+    load_Books(Book_list)
     while 1:
         menu = print_menu()
         if menu == 1:
@@ -95,6 +139,8 @@ def run():
             delete_Books(Book_list, BookName, BookWriter)
 
         elif menu == 99:
+            save_Member(MemberCard_list)
+            save_Books(Book_list)
             break
 
 if __name__ == "__main__":
